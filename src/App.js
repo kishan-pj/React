@@ -1,52 +1,63 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 function App(props) {
-  const [notes, setNotes] = useState(props.notes)
-  const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true)
+  const [notes, setNotes] = useState(props.notes);
+  const [newNote, setNewNote] = useState("");
+  const [showAll, setShowAll] = useState(true);
+
+  useEffect(()=>{
+    axios.get('http://localhost:3001/notes')
+    .then(response=>{
+      console.log(response.data)
+      setNotes(response.data)
+    })
+    .catch(err => console.log(err))
+  },[])
+
+
 
   const notesToShow = showAll
     ? notes
-    : notes.filter(n => n.important === true)
+    : notes.filter((n) => n.important === true);
 
   const handleChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
+    console.log(event.target.value);
+    setNewNote(event.target.value);
+  };
 
   const handleAdd = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     // Create a note
     const note = {
       id: notes.length + 1,
       content: newNote,
       date: new Date().toString(),
-      important: Math.random() < 0.5
-    }
+      important: Math.random() < 0.5,
+    };
 
-    if (newNote !== '') setNotes(notes.concat(note))
-    setNewNote('')
-  }
+    if (newNote !== "") setNotes(notes.concat(note));
+    setNewNote("");
+  };
 
   const handleDelete = (id) => {
-    window.confirm(`Do you really want to delete note with id ${id}`)
-
-  }
+    window.confirm(`Do you really want to delete note with id ${id}`);
+  };
 
   return (
     <>
       <h2>Notes</h2>
       <button onClick={() => setShowAll(!showAll)}>
-        {showAll ? 'show important' : 'show all'}
+        {showAll ? "show important" : "show all"}
       </button>
       <ul>
-        {notesToShow.map(note =>
-          <li key={note.id}> <p>{note.content}</p>
+        {notesToShow.map((note) => (
+          <li key={note.id}>
+            {" "}
+            <p>{note.content}</p>
             <p>{note.date}</p>
-            <button onClick={() => handleDelete(note.id)}>
-              delete
-            </button>
+            <button onClick={() => handleDelete(note.id)}>delete</button>
           </li>
-        )}
+        ))}
       </ul>
 
       <form>
