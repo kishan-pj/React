@@ -14,8 +14,6 @@ function App(props) {
     .catch(err => console.log(err))
   },[])
 
-
-
   const notesToShow = showAll
     ? notes
     : notes.filter((n) => n.important === true);
