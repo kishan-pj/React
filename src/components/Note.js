@@ -1,16 +1,11 @@
-const Note = () => {
-  const note = props.note;
-
+const Note = (props) => {
+  const { note, setdelete } = props;
   return (
-    <>
-      {note.content}
-      <br />
-
-      {note.date}
-      <br />
-
-      <button onClick={() => deletenote(note.id)}>delete</button>
-    </>
+    <li>
+      <p>{note.content}</p>
+      <p>{note.date}</p>
+      <button onClick={setdelete}>delete</button>
+    </li>
   );
 };
 
